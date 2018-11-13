@@ -12,8 +12,12 @@ D               rhoAmbient      Initial ambient density
 D		windVel 	Inflow velocity (parallel to x-axis)
 
 PARAMETER sim_pAmbient     REAL    1.0
-PARAMETER sim_rhoAmbient   REAL    1.4
-PARAMETER sim_windVel	   REAL	   3.0
+PARAMETER sim_rhoAmbient   REAL    1.0
+PARAMETER sim_tAmbient	   REAL	   1.0
+PARAMETER sim_nozHeight    REAL    1.0
+PARAMETER sim_nozExit	   REAL    1.0
+PARAMETER sim_nozIn		   REAL	   1.0
+PARAMETER sim_pBacking	   REAL	   1.0
 
 # Enough NBOUNDARIES space for taking 12 blocks out of a 2d problem:
 PPDEFINE NBOUNDARIES 16

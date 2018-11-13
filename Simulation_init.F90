@@ -44,11 +44,15 @@ subroutine Simulation_init()
 
   call RuntimeParameters_get('sim_pAmbient', sim_pAmbient)
   call RuntimeParameters_get('sim_rhoAmbient', sim_rhoAmbient)
+  call RuntimeParameters_get('sim_tAmbient', sim_tAmbient)
+
   call RuntimeParameters_get('gamma', sim_gamma)
+  call RuntimeParameters_get('eos_singleSpeciesA', eos_singleSpeciesA)
+  call RuntimeParameters_get('eos_singleSpeciesZ', eos_singleSpeciesZ)
+
   call RuntimeParameters_get('smallx', sim_smallX)
   call RuntimeParameters_get('smallp', sim_smallP)
 
-  call RuntimeParameters_get('sim_TAmbient', sim_TAmbient)
   call RuntimeParameters_get('sim_nozHeight', sim_nozHeight)
   call RuntimeParameters_get('sim_nozExit', sim_nozExit)
   call RuntimeParameters_get('sim_nozIn', sim_nozIn)

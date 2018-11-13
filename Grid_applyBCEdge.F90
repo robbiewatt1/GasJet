@@ -80,7 +80,7 @@
 subroutine Grid_applyBCEdge(bcType,bcDir,guard,var,dataRow,face,&
      gridDataStruct, blockHandle, secondCoord, thirdCoord)
   use Simulation_data, ONLY: sim_pAmbient, sim_rhoAmbient, sim_gamma, &
-     &  sim_smallP, sim_smallX
+     &  sim_smallP, sim_smallX, sim_pBacking, sim_tAmbient, eos_singleSpeciesA
   use Driver_interface, ONLY : Driver_abortFlash
   use Grid_data, ONLY :gr_meshMe                   ! only needed for print* in error case
   implicit none
@@ -136,9 +136,11 @@ subroutine Grid_applyBCEdge(bcType,bcDir,guard,var,dataRow,face,&
         case(GAME_VAR)
            dataRow(1:guard)=sim_gamma
         case(DENS_VAR)
-           dataRow(1:guard)=sim_rhoAmbient
+           dataRow(1:guard)=((sim_pBacking / sim_tAmbient)/(eos_singleSpeciesA))   
         case(PRES_VAR)
-           dataRow(1:guard)=sim_pAmbient
+           dataRow(1:guard)=sim_pBacking
+        case(TEMP_VAR)
+           dataRow(1:guard)=sim_tAmbient
         case(VELX_VAR)
            dataRow(1:guard)=0.0
         case(VELY_VAR)
@@ -146,9 +148,9 @@ subroutine Grid_applyBCEdge(bcType,bcDir,guard,var,dataRow,face,&
         case(VELZ_VAR)
            dataRow(1:guard)=0.0
         case(ENER_VAR)
-           dataRow(1:guard) = max( sim_pAmbient / ((sim_gamma-1.) * sim_rhoAmbient), sim_smallP)
+           dataRow(1:guard) = 1.0
         case(EINT_VAR)
-           dataRow(1:guard) = max( sim_pAmbient / ((sim_gamma-1.) * sim_rhoAmbient), sim_smallP)
+           dataRow(1:guard) = 1.0
         case(SPECIES_BEGIN)
            dataRow(1:guard)=1.0e0-sim_smallX
         case(SPECIES_BEGIN+1)

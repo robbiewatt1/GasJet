@@ -6,11 +6,19 @@
 
 sim_pAmbient	= 1.0
 sim_rhoAmbient	= 1.4
-sim_windVel     = 3.0
+sim_tAmbient    = 3.0
+sim_nozHeight	= 1.0
+sim_nozExit		= 1.0
+sim_nozIn		= 1.0
+sim_pBacking	= 1.0
+
+plot_var_1 = "dens"
 
 #		Gas ratio of specific heats
 
 gamma           = 1.4
+eos_singleSpeciesA = 1
+eos_singleSpeciesZ = 1
 
 #	Computational volume parameters
 

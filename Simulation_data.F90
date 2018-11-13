@@ -35,7 +35,7 @@ module Simulation_data
   !! *** Runtime Parameters *** !!
 
   real, save :: sim_pAmbient, sim_TAmbient, sim_rhoAmbient
-  real, save :: sim_gamma, sim_smallP, sim_smallX
+  real, save :: sim_gamma, sim_smallP, sim_smallX, eos_singleSpeciesA, eos_singleSpeciesZ
   real, save :: sim_nozHeight, sim_nozExit, sim_nozIn
   real, save :: sim_pBacking
 
