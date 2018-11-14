@@ -6,6 +6,7 @@ REQUIRES Grid/GridBoundaryConditions/OneRow
 REQUIRES physics/Hydro
 REQUIRES physics/Eos/EosMain/Gamma
 
+VARIABLE BDRY
 
 D               pAmbient        Initial ambient pressure
 D               rhoAmbient      Initial ambient density

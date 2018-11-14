@@ -136,7 +136,7 @@ subroutine Grid_applyBCEdge(bcType,bcDir,guard,var,dataRow,face,&
         case(GAME_VAR)
            dataRow(1:guard)=sim_gamma
         case(DENS_VAR)
-           dataRow(1:guard)=((sim_pBacking / sim_tAmbient)/(eos_singleSpeciesA))   
+           dataRow(1:guard)=((sim_pBacking / sim_tAmbient) / (8.3145e7 /  eos_singleSpeciesA))   
         case(PRES_VAR)
            dataRow(1:guard)=sim_pBacking
         case(TEMP_VAR)
