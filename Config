@@ -19,6 +19,9 @@ PARAMETER sim_nozHeight    REAL    1.0
 PARAMETER sim_nozExit	   REAL    1.0
 PARAMETER sim_nozIn		   REAL	   1.0
 PARAMETER sim_pBacking	   REAL	   1.0
+PARAMETER sim_chamHeight   REAL	   1.0
+PARAMETER sim_chamWidth    REAL	   1.0
+
 
 # Enough NBOUNDARIES space for taking 12 blocks out of a 2d problem:
 PPDEFINE NBOUNDARIES 16

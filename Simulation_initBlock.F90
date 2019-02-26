@@ -33,7 +33,7 @@ subroutine Simulation_initBlock(blockID)
 
   use Simulation_data, ONLY: sim_pAmbient, sim_tAmbient, sim_gamma, &
      &  sim_smallP, sim_smallX, eos_singlespeciesa, sim_nozIn, sim_nozExit, &
-     sim_nozHeight, sim_pBacking
+     sim_nozHeight, sim_pBacking, xmin, xmax, ymin, ymax, sim_chamHeight, sim_chamWidth
   use Grid_interface, ONLY : Grid_getBlkIndexLimits, &
     Grid_getBlkPtr, Grid_releaseBlkPtr
 
@@ -49,8 +49,7 @@ subroutine Simulation_initBlock(blockID)
   real,pointer :: solnData(:,:,:,:)
   integer :: axis(MDIM)  
   real, allocatable :: xcent(:), ycent(:), zcent(:)
-  real :: xMax, yMax, zMax
-  real :: wall_thickness
+  real :: wall_thickness, vac_thickness, exitWall_thickness, inWall_thickness
   integer:: i, j, k
 
   real :: rho_zone, velx_zone, vely_zone, velz_zone, pres_zone, &
@@ -73,12 +72,6 @@ subroutine Simulation_initBlock(blockID)
   allocate(zcent(blkLimitsGC(HIGH, KAXIS)))
   call Grid_getCellCoords(KAXIS, blockID, CENTER, .true., &
        zcent, blkLimitsGC(HIGH, KAXIS))
-
-
-  xMax = xcent(size(xcent))
-  yMax = xcent(size(ycent))
-  zMax = xcent(size(zcent))
-  wall_thickness = (xMax - sim_nozIn) / 2.0
 
 
 ! In this problem the initial conditions are spatially uniform.
@@ -109,25 +102,62 @@ subroutine Simulation_initBlock(blockID)
            axis(JAXIS) = j
            axis(KAXIS) = k
 
-          if (ycent(j) <= sim_nozHeight ) then
-            if (xcent(i) <= wall_thickness ) then !.and. xcent(i) <= wall_thickness + sim_nozIn) then
-              species = Cham_spec
-            else 
-              species = Wall_spec
+           if (NDIM == 2) then
+            if (xcent(i) <= sim_chamHeight ) then
+              wall_thickness = (ymax - sim_chamWidth) / 2.0
+              if (ycent(j) >= wall_thickness .and. ycent(j) <= wall_thickness + sim_chamWidth) then
+                species = Vac_spec
+              else 
+                species = Wall_spec
+              endif
+            elseif (xcent(i) > sim_chamHeight .and. xcent(i) <= sim_chamHeight +  sim_nozHeight) then
+              exitWall_thickness = (ymax - sim_nozExit) / 2.0
+              inWall_thickness = (yMax - (2.0 * exitWall_thickness + sim_nozIn)) / 2.0 
+              wall_thickness = exitWall_thickness + (sim_nozHeight + sim_chamHeight - xcent(i)) * (inWall_thickness / sim_nozHeight)
+              vac_thickness = xMax - 2.0 * wall_thickness
+              if (ycent(j) >= wall_thickness .and. ycent(j) <= wall_thickness + vac_thickness) then
+                species = Vac_spec
+              else
+                species = Wall_spec
+              endif
+            else
+              species = Vac_spec
             endif
-          else
-            species = Vac_spec
+          elseif (NDIM == 3) then
+            if (zcent(k) <= sim_chamHeight) then
+              wall_thickness = (xmax - sim_chamWidth) / 2.0
+              if (xcent(i) >= wall_thickness .and. xcent(i) <= wall_thickness + sim_chamWidth &
+                  .and. ycent(j) >= wall_thickness .and. ycent(j) <= wall_thickness + sim_chamWidth) then
+                species = Vac_spec
+              else 
+                species = Wall_spec
+              endif
+            elseif (zcent(k) > sim_chamHeight .and. zcent(k) <= sim_chamHeight +  sim_nozHeight) then
+              exitWall_thickness = (xMax - sim_nozExit) / 2.0
+              inWall_thickness = (xMax - (2.0 * exitWall_thickness + sim_nozIn)) / 2.0 
+              wall_thickness = exitWall_thickness + (sim_nozHeight + sim_chamHeight - zcent(k)) * (inWall_thickness / sim_nozHeight)
+              vac_thickness = xMax - 2.0 * wall_thickness
+             if (xcent(i) >= wall_thickness .and. xcent(i) <= wall_thickness + vac_thickness &
+                 .and. ycent(j) >= wall_thickness .and. ycent(j) <= wall_thickness + vac_thickness) then
+                species = Vac_spec
+              else
+                species = Wall_spec
+              endif
+            else
+              species = Vac_spec
+            endif       
+              
           endif
 
           if (species == Cham_spec) then
-            call Grid_putPointData(blockId, CENTER, BDRY_VAR, EXTERIOR, axis, -1.0)
+          !  call Grid_putPointData(blockId, CENTER, BDRY_VAR, EXTERIOR, axis, -1.0)
             call Grid_putPointData(blockId, CENTER, DENS_VAR, EXTERIOR, axis, rho_chamber)
           elseif (species == Wall_spec) then
-            call Grid_putPointData(blockId, CENTER, DENS_VAR, EXTERIOR, axis, rho_zone*2000)
-            call Grid_putPointData(blockId, CENTER, BDRY_VAR, EXTERIOR, axis, 1.0)
+            call Grid_putPointData(blockId, CENTER, BDRY_VAR, EXTERIOR, axis, 1.0)            
+            call Grid_putPointData(blockId, CENTER, DENS_VAR, EXTERIOR, axis, rho_chamber*1e-5)
           elseif (species == Vac_spec) then
-            call Grid_putPointData(blockId, CENTER, BDRY_VAR, EXTERIOR, axis, -1.0)
-            call Grid_putPointData(blockId, CENTER, DENS_VAR, EXTERIOR, axis, rho_zone)
+         !   call Grid_putPointData(blockId, CENTER, BDRY_VAR, EXTERIOR, axis, -1.0)
+            call Grid_putPointData(blockId, CENTER, DENS_VAR, EXTERIOR, axis, rho_zone*1e-5)
           endif
 
            call Grid_putPointData(blockId, CENTER, ENER_VAR, EXTERIOR, axis, ener_zone)    
@@ -140,9 +170,6 @@ subroutine Simulation_initBlock(blockID)
         enddo
       enddo
   enddo
-
-
-
 
  ! call Grid_releaseBlkPtr(blockID, solnData, CENTER)
   deallocate(xcent)

@@ -57,6 +57,13 @@ subroutine Simulation_init()
   call RuntimeParameters_get('sim_nozExit', sim_nozExit)
   call RuntimeParameters_get('sim_nozIn', sim_nozIn)
   call RuntimeParameters_get('sim_pBacking', sim_pBacking)
+  call RuntimeParameters_get('sim_chamHeight', sim_chamHeight)
+  call RuntimeParameters_get('sim_chamWidth', sim_chamWidth)
+
+  call RuntimeParameters_get('xmin', xmin)
+  call RuntimeParameters_get('xmax', xmax)
+  call RuntimeParameters_get('ymin', ymin)
+  call RuntimeParameters_get('ymax', ymax)
 
 
   call Logfile_stamp("initializing for windtunnel + step", 'run_init')

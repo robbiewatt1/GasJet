@@ -31,18 +31,23 @@ geometry = "cartesian"
 
 Nblockx		= 5
 Nblocky		= 5
+Nblockz		= 5 
 xmin		= 0.
 xmax		= 5.
 ymin		= 0.
 ymax		= 5.
+zmin		= 0.
+zmax		= 5.
 
 #		Boundary conditions
 
+zl_boundary_type = "user"
+zr_boundary_type = "outflow"
 
 yl_boundary_type = "outflow"
 yr_boundary_type = "outflow"
 
-xl_boundary_type = "user"
+xl_boundary_type = "outflow"
 xr_boundary_type = "outflow"
 
 

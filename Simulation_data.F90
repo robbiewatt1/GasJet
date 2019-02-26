@@ -36,8 +36,9 @@ module Simulation_data
 
   real, save :: sim_pAmbient, sim_TAmbient, sim_rhoAmbient
   real, save :: sim_gamma, sim_smallP, sim_smallX, eos_singleSpeciesA, eos_singleSpeciesZ
-  real, save :: sim_nozHeight, sim_nozExit, sim_nozIn
+  real, save :: sim_nozHeight, sim_nozExit, sim_nozIn, sim_chamHeight, sim_chamWidth
   real, save :: sim_pBacking
+  real, save :: xmin, xmax, ymin, ymax
 
 integer, save :: sim_meshMe
 end module Simulation_data

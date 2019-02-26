@@ -77,7 +77,7 @@
 !!***
 
 
-subroutine Grid_applyBCEdge(bcType,bcDir,guard,var,dataRow,face,&
+subroutine Grid_bcApplyToRegionSpecialized(bcType,bcDir,guard,var,dataRow,face,&
      gridDataStruct, blockHandle, secondCoord, thirdCoord)
   use Simulation_data, ONLY: sim_pAmbient, sim_rhoAmbient, sim_gamma, &
      &  sim_smallP, sim_smallX, sim_pBacking, sim_tAmbient, eos_singleSpeciesA
@@ -183,5 +183,5 @@ subroutine Grid_applyBCEdge(bcType,bcDir,guard,var,dataRow,face,&
      end select
   end if
   return
-end subroutine Grid_applyBCEdge
+end subroutine grid_bcapplytoregionspecialized
 
